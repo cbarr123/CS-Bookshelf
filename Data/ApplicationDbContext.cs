@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using BookShelf.Models;
 
 namespace BookShelf.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<BookShelf.Models.Author> Author { get; set; }
+        public DbSet<BookShelf.Models.Book> Book { get; set; }
     }
 }
