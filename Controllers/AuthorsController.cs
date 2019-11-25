@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BookShelf.Data;
 using BookShelf.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookShelf.Controllers
 {
@@ -15,10 +16,12 @@ namespace BookShelf.Controllers
     public class AuthorsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AuthorsController(ApplicationDbContext context)
+        public AuthorsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Authors

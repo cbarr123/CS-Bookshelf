@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BookShelf.Data;
 using BookShelf.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookShelf.Controllers
 {
@@ -15,15 +16,26 @@ namespace BookShelf.Controllers
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BooksController(ApplicationDbContext context)
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+
+        public BooksController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+
 
         // GET: Books
         public async Task<IActionResult> Index()
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var applicationDBContext = _context.Book
+                                        .Include(b => b.Owner)
+                                        .Where(b => b.Owner = user.Id);
+
             return View(await _context.Book.ToListAsync());
         }
 
